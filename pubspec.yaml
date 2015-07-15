@@ -1,0 +1,15 @@
+name: enum_class
+version: 0.0.1
+description: >
+  Dart classes as enums.
+authors:
+- David Morgan <davidmorgan@google.com>
+homepage: https://github.com/google/enum_class.dart
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+#dependencies:
+#  lib_name: any
+dev_dependencies:
+  unittest: any
