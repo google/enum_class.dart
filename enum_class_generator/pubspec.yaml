@@ -1,0 +1,19 @@
+name: enum_class_generator
+version: 0.0.1
+description: >
+  Dart classes as enums. This library is the dev dependency.
+authors:
+- David Morgan <davidmorgan@google.com>
+homepage: https://github.com/google/enum_class.dart
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+dependencies:
+  built_collection: '^1.0.0'
+  enum_class: '^0.0.1'
+  source_gen: '>=0.4.2 <1.0.0'
+  quiver: '>=0.21.0 <0.22.0'
+
+dev_dependencies:
+  test: any

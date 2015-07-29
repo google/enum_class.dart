@@ -1,7 +1,7 @@
 name: enum_class
 version: 0.0.1
 description: >
-  Dart classes as enums.
+  Dart classes as enums. This library is the runtime dependency.
 authors:
 - David Morgan <davidmorgan@google.com>
 homepage: https://github.com/google/enum_class.dart
@@ -9,7 +9,8 @@ homepage: https://github.com/google/enum_class.dart
 environment:
   sdk: '>=1.0.0 <2.0.0'
 
-#dependencies:
-#  lib_name: any
+dependencies:
+  built_collection: '^1.0.0'
+
 dev_dependencies:
-  unittest: any
+  test: any

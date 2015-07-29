@@ -8,10 +8,13 @@ library enum_class;
 ///
 /// Extend this class then use the enum_class.dart code generation
 /// functionality to provide the rest of the implementation.
+///
+/// See https://github.com/google/enum_class.dart/tree/master/example
 class EnumClass {
   final String name;
 
   const EnumClass(this.name);
 
+  @override
   String toString() => name;
 }
