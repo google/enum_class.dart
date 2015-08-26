@@ -3,6 +3,8 @@
 .idea
 .pub/
 .settings/
-build/
-packages
-pubspec.lock
+*.iml
+**/build
+**/packages
+**/pubspec.lock
+**/.packages
