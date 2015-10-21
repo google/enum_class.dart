@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2015-08-18T08:36:02.364Z
+// 2015-10-21T06:26:57.002Z
 
 part of test_enum;
 
@@ -27,3 +27,28 @@ TestEnum _$valueOf(String name) {
 
 final BuiltSet<TestEnum> _$values =
     new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class SecondTestEnum
+// **************************************************************************
+
+const SecondTestEnum _$ys = const SecondTestEnum._('yes');
+const SecondTestEnum _$n = const SecondTestEnum._('no');
+const SecondTestEnum _$definitely = const SecondTestEnum._('definitely');
+
+SecondTestEnum _$vlOf(String name) {
+  switch (name) {
+    case 'yes':
+      return _$ys;
+    case 'no':
+      return _$n;
+    case 'definitely':
+      return _$definitely;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<SecondTestEnum> _$vls =
+    new BuiltSet<SecondTestEnum>(const [_$ys, _$n, _$definitely,]);

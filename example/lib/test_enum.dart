@@ -12,8 +12,9 @@ part 'test_enum.g.dart';
 /// Example of how to use [EnumClass].
 ///
 /// Enum constants must be declared as `static const`. Initialize them from
-/// the generated code. For example, a constant called `yes` initializes to
-/// `_$yes`.
+/// the generated code. You can use any initializer starting _$ and the
+/// generated code will match it. For example, you could initialize "yes" to
+/// "_$yes", "_$y" or even "_$abc".
 ///
 /// You need to write three pieces of boilerplate to hook up the generated
 /// code: a constructor called `_`, a `values` method, and a `valueOf` method.
@@ -26,4 +27,20 @@ class TestEnum extends EnumClass {
 
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
+}
+
+/// It's possible to have multiple enums in the same file.
+///
+/// For this to work, you need to change any generated names that clash. For
+/// example, _$values and _$valueOf will always clash. You can change them
+/// to anything you like, the code generation wll match what you write.
+class SecondTestEnum extends EnumClass {
+  static const SecondTestEnum yes = _$ys;
+  static const SecondTestEnum no = _$n;
+  static const SecondTestEnum definitely = _$definitely;
+
+  const SecondTestEnum._(String name) : super(name);
+
+  static BuiltSet<SecondTestEnum> get values => _$vls;
+  static SecondTestEnum valueOf(String name) => _$vlOf(name);
 }

@@ -15,6 +15,8 @@ import 'package:source_gen/source_gen.dart';
 /// See https://github.com/google/enum_class.dart/tree/master/example for how
 /// to use it.
 class EnumClassGenerator extends Generator {
+  Set<String> _usedGeneratedIdentifiers = new Set<String>();
+
   Future<String> generate(Element element) async {
     if (element is! ClassElement) {
       return null;
@@ -27,13 +29,13 @@ class EnumClassGenerator extends Generator {
         .where((i) => i.displayName == 'EnumClass')
         .isEmpty) return null;
 
-    final fields = getApplicableFields(classElement);
+    final fields = _getApplicableFields(classElement);
     final errors = concat([
-      checkPart(classElement),
-      checkFields(fields),
-      checkConstructor(classElement),
-      checkValuesGetter(classElement),
-      checkValueOf(classElement)
+      _checkPart(classElement),
+      _checkFields(fields),
+      _checkConstructor(classElement),
+      _checkValuesGetter(classElement),
+      _checkValueOf(classElement)
     ]);
 
     if (errors.isNotEmpty) {
@@ -42,10 +44,10 @@ class EnumClassGenerator extends Generator {
           todo: errors.join(' '));
     }
 
-    return generateCode(enumName, fields.map((field) => field.displayName));
+    return _generateCode(classElement, enumName, fields);
   }
 
-  Iterable<String> checkPart(ClassElement classElement) {
+  Iterable<String> _checkPart(ClassElement classElement) {
     final fileName =
         classElement.library.source.shortName.replaceAll('.dart', '');
     final expectedCode = "part '$fileName.g.dart';";
@@ -54,7 +56,7 @@ class EnumClassGenerator extends Generator {
         : <String>['Import generated part: $expectedCode'];
   }
 
-  Iterable<FieldElement> getApplicableFields(ClassElement classElement) {
+  Iterable<FieldElement> _getApplicableFields(ClassElement classElement) {
     final enumName = classElement.displayName;
     final result = <FieldElement>[];
     for (final field in classElement.fields) {
@@ -64,7 +66,7 @@ class EnumClassGenerator extends Generator {
     return result;
   }
 
-  Iterable<String> checkFields(Iterable<FieldElement> fields) {
+  Iterable<String> _checkFields(Iterable<FieldElement> fields) {
     final result = <String>[];
     for (final field in fields) {
       final fieldName = field.displayName;
@@ -76,15 +78,23 @@ class EnumClassGenerator extends Generator {
         continue;
       }
 
-      if (field.computeNode().toString() != '$fieldName = _\$$fieldName') {
-        result.add(
-            'Initialize field "$fieldName" with generated value "_\$$fieldName".');
+      if (!field.computeNode().toString().startsWith('$fieldName = _\$')) {
+        result
+            .add('Initialize field "$fieldName" with a value starting "_\$".');
       }
+
+      final identifier = _getGeneratedIdentifier(field);
+      if (_usedGeneratedIdentifiers.contains(identifier)) {
+        result
+            .add('Generated identifier "_\$$identifier" is used multiple times,'
+                ' change to something else.');
+      }
+      _usedGeneratedIdentifiers.add(identifier);
     }
     return result;
   }
 
-  Iterable<String> checkConstructor(ClassElement classElement) {
+  Iterable<String> _checkConstructor(ClassElement classElement) {
     final enumName = classElement.displayName;
     final expectedCode = 'const $enumName._(String name) : super(name);';
     return classElement.constructors.length == 1 &&
@@ -92,50 +102,104 @@ class EnumClassGenerator extends Generator {
             expectedCode ? <String>[] : <String>['Constructor: $expectedCode'];
   }
 
-  Iterable<String> checkValuesGetter(ClassElement classElement) {
+  Iterable<String> _checkValuesGetter(ClassElement classElement) {
     // TODO(davidmorgan): do this without reading the whole source.
     final enumName = classElement.displayName;
-    final expectedCode = 'static BuiltSet<$enumName> get values => _\$values;';
-    return classElement.source.contents.data.contains(expectedCode)
-        ? <String>[]
-        : <String>['Getter: $expectedCode'];
+    final valuesIdentifier =
+        _getValuesIdentifier(classElement.source.contents.data, enumName);
+    if (valuesIdentifier == null) {
+      return <String>[
+        'Getter: static BuiltSet<$enumName> get values => _\$values'
+      ];
+    } else {
+      if (_usedGeneratedIdentifiers.contains(valuesIdentifier)) {
+        return <String>[
+          'Generated identifier "_\$$valuesIdentifier" is used multiple times,'
+              ' change to something else.'
+        ];
+      } else {
+        return <String>[];
+      }
+    }
   }
 
-  Iterable<String> checkValueOf(ClassElement classElement) {
+  Iterable<String> _checkValueOf(ClassElement classElement) {
     // TODO(davidmorgan): do this without reading the whole source.
     final enumName = classElement.displayName;
-    final expectedCode =
-        'static $enumName valueOf(String name) => _\$valueOf(name);';
-    return classElement.source.contents.data.contains(expectedCode)
-        ? <String>[]
-        : <String>['Method: $expectedCode'];
+
+    final valueOfIdentifier =
+        _getValueOfIdentifier(classElement.source.contents.data, enumName);
+
+    if (valueOfIdentifier == null) {
+      return <String>[
+        'Method: static $enumName valueOf(String name) => _\$valueOf(name)'
+      ];
+    } else {
+      if (_usedGeneratedIdentifiers.contains(valueOfIdentifier)) {
+        return <String>[
+          'Generated identifier "_\$$valueOfIdentifier" is used multiple times,'
+              ' change to something else.'
+        ];
+      } else {
+        return <String>[];
+      }
+    }
   }
 
-  String generateCode(String enumName, Iterable<String> fieldNames) {
+  String _generateCode(ClassElement classElement, String enumName,
+      Iterable<FieldElement> fields) {
     final result = new StringBuffer();
 
-    for (final fieldName in fieldNames) {
-      result.writeln('const $enumName _\$$fieldName = '
+    for (final field in fields) {
+      final fieldName = field.displayName;
+      result.writeln('const $enumName _\$${_getGeneratedIdentifier(field)} = '
           'const $enumName._(\'$fieldName\');');
     }
 
     result.writeln('');
-    result.writeln('$enumName _\$valueOf(String name) {'
+
+    final valueOf =
+        _getValueOfIdentifier(classElement.source.contents.data, enumName);
+    result.writeln('$enumName _\$$valueOf(String name) {'
         'switch (name) {');
-    for (final fieldName in fieldNames) {
-      result.writeln('case \'$fieldName\': return _\$$fieldName;');
+    for (final field in fields) {
+      final fieldName = field.displayName;
+      result.writeln(
+          'case \'$fieldName\': return _\$${_getGeneratedIdentifier(field)};');
     }
     result.writeln('default: throw new ArgumentError(name);');
     result.writeln('}}');
 
     result.writeln('');
-    result.writeln('final BuiltSet<$enumName> _\$values ='
+
+    final values =
+        _getValuesIdentifier(classElement.source.contents.data, enumName);
+    result.writeln('final BuiltSet<$enumName> _\$$values ='
         'new BuiltSet<$enumName>(const [');
-    for (final fieldName in fieldNames) {
-      result.writeln('_\$$fieldName,');
+    for (final field in fields) {
+      result.writeln('_\$${_getGeneratedIdentifier(field)},');
     }
     result.writeln(']);');
 
     return result.toString();
+  }
+
+  String _getGeneratedIdentifier(FieldElement field) {
+    final fieldName = field.displayName;
+    return field.computeNode().toString().substring('$fieldName = _\$'.length);
+  }
+
+  String _getValueOfIdentifier(String source, String enumName) {
+    final matches = new RegExp(r'static ' +
+        enumName +
+        r' valueOf\(String name\) \=\> \_\$(\w+)\(name\)\;').allMatches(source);
+    return matches.isEmpty ? null : matches.first.group(1);
+  }
+
+  String _getValuesIdentifier(String source, String enumName) {
+    final matches = new RegExp(
+            r'static BuiltSet<' + enumName + r'> get values => _\$(\w+)\;')
+        .allMatches(source);
+    return matches.isEmpty ? null : matches.first.group(1);
   }
 }

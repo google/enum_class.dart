@@ -205,7 +205,7 @@ class TestEnum extends EnumClass {
 '''), endsWith(correctOutput));
     });
 
-    test('fails with error on incorrect rhs in field declaration', () async {
+    test('matches generated names to rhs for field names', () async {
       expect(await generate(r'''
 library test_enum;
 
@@ -232,8 +232,138 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
+const TestEnum _$no = const TestEnum._('yes');
+const TestEnum _$maybe = const TestEnum._('no');
+const TestEnum _$yes = const TestEnum._('maybe');
+
+TestEnum _$valueOf(String name) {
+  switch (name) {
+    case 'yes':
+      return _$no;
+    case 'no':
+      return _$maybe;
+    case 'maybe':
+      return _$yes;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<TestEnum> _$values =
+    new BuiltSet<TestEnum>(const [_$no, _$maybe, _$yes,]);
+'''));
+    });
+
+    test('matches generated names to values and valueOf', () async {
+      expect(await generate(r'''
+library test_enum;
+
+import 'package:built_collection/built_collection.dart';
+import 'package:enum_class/enum_class.dart';
+
+part 'test_enum.g.dart';
+
+class TestEnum extends EnumClass {
+  static const TestEnum yes = _$yes;
+  static const TestEnum no = _$no;
+  static const TestEnum maybe = _$maybe;
+
+  const TestEnum._(String name) : super(name);
+
+  static BuiltSet<TestEnum> get values => _$vls;
+  static TestEnum valueOf(String name) => _$vlOf(name);
+}
+'''), endsWith(r'''
+part of test_enum;
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class TestEnum
+// **************************************************************************
+
+const TestEnum _$yes = const TestEnum._('yes');
+const TestEnum _$no = const TestEnum._('no');
+const TestEnum _$maybe = const TestEnum._('maybe');
+
+TestEnum _$vlOf(String name) {
+  switch (name) {
+    case 'yes':
+      return _$yes;
+    case 'no':
+      return _$no;
+    case 'maybe':
+      return _$maybe;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<TestEnum> _$vls =
+    new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
+'''));
+    });
+
+    test('fails with error on name clash for field rhs', () async {
+      expect(await generate(r'''
+library test_enum;
+
+import 'package:built_collection/built_collection.dart';
+import 'package:enum_class/enum_class.dart';
+
+part 'test_enum.g.dart';
+
+class TestEnum extends EnumClass {
+  static const TestEnum yes = _$no;
+  static const TestEnum no = _$no;
+  static const TestEnum maybe = _$yes;
+
+  const TestEnum._(String name) : super(name);
+
+  static BuiltSet<TestEnum> get values => _$values;
+  static TestEnum valueOf(String name) => _$valueOf(name);
+}
+'''), endsWith(r'''
+part of test_enum;
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class TestEnum
+// **************************************************************************
+
 // Error: Please make changes to use EnumClass.
-// TODO: Initialize field "yes" with generated value "_$yes". Initialize field "no" with generated value "_$no". Initialize field "maybe" with generated value "_$maybe".
+// TODO: Generated identifier "_$no" is used multiple times, change to something else.
+'''));
+    });
+
+    test('fails with error on name clash for values', () async {
+      expect(await generate(r'''
+library test_enum;
+
+import 'package:built_collection/built_collection.dart';
+import 'package:enum_class/enum_class.dart';
+
+part 'test_enum.g.dart';
+
+class TestEnum extends EnumClass {
+  static const TestEnum yes = _$no;
+  static const TestEnum no = _$maybe;
+  static const TestEnum maybe = _$yes;
+
+  const TestEnum._(String name) : super(name);
+
+  static BuiltSet<TestEnum> get values => _$no;
+  static TestEnum valueOf(String name) => _$valueOf(name);
+}
+'''), endsWith(r'''
+part of test_enum;
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class TestEnum
+// **************************************************************************
+
+// Error: Please make changes to use EnumClass.
+// TODO: Generated identifier "_$no" is used multiple times, change to something else.
 '''));
     });
 
@@ -362,7 +492,7 @@ part of test_enum;
 // **************************************************************************
 
 // Error: Please make changes to use EnumClass.
-// TODO: Getter: static BuiltSet<TestEnum> get values => _$values;
+// TODO: Getter: static BuiltSet<TestEnum> get values => _$values
 '''));
     });
 
@@ -393,7 +523,7 @@ part of test_enum;
 // **************************************************************************
 
 // Error: Please make changes to use EnumClass.
-// TODO: Method: static TestEnum valueOf(String name) => _$valueOf(name);
+// TODO: Method: static TestEnum valueOf(String name) => _$valueOf(name)
 '''));
     });
   });
