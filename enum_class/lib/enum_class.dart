@@ -4,6 +4,8 @@
 
 library enum_class;
 
+export 'package:built_collection/built_collection.dart' show BuiltSet;
+
 /// Enum Class base class.
 ///
 /// Extend this class then use the enum_class.dart code generation

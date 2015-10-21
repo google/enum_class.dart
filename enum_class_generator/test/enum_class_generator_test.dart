@@ -12,7 +12,6 @@ import 'package:test/test.dart';
 final String correctInput = r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -64,12 +63,45 @@ void main() {
       expect(await generate(correctInput), endsWith(correctOutput));
     });
 
+    test('allows part statement with double quotes', () async {
+      expect(
+          await generate(correctInput.replaceAll(
+              "part 'test_enum.g.dart'", 'part "test_enum.g.dart"')),
+          endsWith(correctOutput));
+    });
+
+    test('ignores fields of different type', () async {
+      expect(
+          await generate(correctInput.replaceAll(
+              'class TestEnum extends EnumClass {',
+              'class TestEnum extends EnumClass {\n'
+              '  static const int anInt = 3;')),
+          endsWith(correctOutput));
+    });
+
+    test('fails on dynamic fields', () async {
+      expect(
+          await generate(correctInput.replaceAll(
+              'class TestEnum extends EnumClass {',
+              'class TestEnum extends EnumClass {\n'
+              '  static const anInt = 3;')),
+          endsWith(r'''
+part of test_enum;
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class TestEnum
+// **************************************************************************
+
+// Error: Please make changes to use EnumClass.
+// TODO: Specify a type for field "anInt".
+'''));
+    });
+
     // TODO(davidmorgan): it would be better to fail with an error message.
     test('fails silently on missing enum_class import', () async {
       expect(await generate(r'''
 library test_enum;
-
-import 'package:built_collection/built_collection.dart';
 
 part 'test_enum.g.dart';
 
@@ -90,7 +122,6 @@ class TestEnum extends EnumClass {
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'src_par.dart';
@@ -122,7 +153,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -154,7 +184,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -186,7 +215,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -209,7 +237,6 @@ class TestEnum extends EnumClass {
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -258,7 +285,6 @@ final BuiltSet<TestEnum> _$values =
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -307,7 +333,6 @@ final BuiltSet<TestEnum> _$vls =
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -339,7 +364,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -371,7 +395,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -401,7 +424,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -433,7 +455,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -469,7 +490,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
@@ -500,7 +520,6 @@ part of test_enum;
       expect(await generate(r'''
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
