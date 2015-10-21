@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4
+
+ - Fail on dynamic fields.
+ - Export BuiltSet.
+ - Allow part statements with double quote.
+
 ## 0.0.3
 
  - Support multiple enums in one file by allowing arbitrary generated identifiers.

@@ -51,7 +51,10 @@ class EnumClassGenerator extends Generator {
     final fileName =
         classElement.library.source.shortName.replaceAll('.dart', '');
     final expectedCode = "part '$fileName.g.dart';";
-    return classElement.library.source.contents.data.contains(expectedCode)
+    final alternativeExpectedCode = 'part "$fileName.g.dart";';
+    final source = classElement.library.source.contents.data;
+    return source.contains(expectedCode) ||
+            source.contains(alternativeExpectedCode)
         ? <String>[]
         : <String>['Import generated part: $expectedCode'];
   }
@@ -61,7 +64,8 @@ class EnumClassGenerator extends Generator {
     final result = <FieldElement>[];
     for (final field in classElement.fields) {
       final type = field.getter.returnType.displayName;
-      if (!field.isSynthetic && type == enumName) result.add(field);
+      if (!field.isSynthetic && (type == enumName || type == 'dynamic')) result
+          .add(field);
     }
     return result;
   }
@@ -70,7 +74,10 @@ class EnumClassGenerator extends Generator {
     final result = <String>[];
     for (final field in fields) {
       final fieldName = field.displayName;
-      if (!field.isConst && !field.isStatic) {
+      if (field.getter.returnType.displayName == 'dynamic') {
+        result.add('Specify a type for field "$fieldName".');
+        continue;
+      } else if (!field.isConst && !field.isStatic) {
         result.add('Make field "$fieldName" static const.');
         continue;
       } else if (!field.isConst) {

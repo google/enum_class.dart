@@ -4,7 +4,6 @@
 
 library test_enum;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:enum_class/enum_class.dart';
 
 part 'test_enum.g.dart';
