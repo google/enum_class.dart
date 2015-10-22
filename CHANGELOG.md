@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5
+
+ - Fix generation across multiple files, allow reuse of generated identifiers.
+
 ## 0.0.4
 
  - Fail on dynamic fields.
