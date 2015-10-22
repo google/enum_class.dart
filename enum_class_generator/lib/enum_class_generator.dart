@@ -18,6 +18,11 @@ class EnumClassGenerator extends Generator {
   Set<String> _usedGeneratedIdentifiers = new Set<String>();
 
   Future<String> generate(Element element) async {
+    // Generated identifiers only have to be unique per library, reset for
+    // each new library.
+    if (element is LibraryElement) {
+      _usedGeneratedIdentifiers = new Set<String>();
+    }
     if (element is! ClassElement) {
       return null;
     }

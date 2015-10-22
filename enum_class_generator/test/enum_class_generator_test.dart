@@ -63,6 +63,13 @@ void main() {
       expect(await generate(correctInput), endsWith(correctOutput));
     });
 
+    test('produces two correct output for two correct inputs', () async {
+      expect(
+          await generateTwo(correctInput,
+              correctInput.replaceAll('test_enum', 'test_enum_two')),
+          endsWith(correctOutput.replaceAll('test_enum', 'test_enum_two')));
+    });
+
     test('allows part statement with double quotes', () async {
       expect(
           await generate(correctInput.replaceAll(
@@ -568,6 +575,30 @@ Future<String> generate(String source) async {
       projectPath: tempDir.path, librarySearchPaths: <String>['lib']);
   final outputFile = new File(libDir.path + '/test_enum.g.dart');
   return outputFile.existsSync() ? outputFile.readAsStringSync() : '';
+}
+
+Future<String> generateTwo(String source, String source2) async {
+  final tempDir =
+      Directory.systemTemp.createTempSync('enum_class_generator.dart.');
+  final packageDir = new Directory(tempDir.path + '/packages')..createSync();
+  final enumClassDir = new Directory(packageDir.path + '/enum_class')
+    ..createSync();
+  final enumClassFile = new File(enumClassDir.path + '/enum_class.dart')
+    ..createSync();
+  enumClassFile.writeAsStringSync(enumClassSource);
+
+  final libDir = new Directory(tempDir.path + '/lib')..createSync();
+  final sourceFile = new File(libDir.path + '/test_enum.dart');
+  sourceFile.writeAsStringSync(source);
+  final sourceFile2 = new File(libDir.path + '/test_enum_two.dart');
+  sourceFile2.writeAsStringSync(source2);
+
+  await build([], [new EnumClassGenerator()],
+      projectPath: tempDir.path, librarySearchPaths: <String>['lib']);
+  final outputFile = new File(libDir.path + '/test_enum.g.dart');
+  final outputFile2 = new File(libDir.path + '/test_enum_two.g.dart');
+  return (outputFile.existsSync() ? outputFile.readAsStringSync() : '') +
+      (outputFile2.existsSync() ? outputFile2.readAsStringSync() : '');
 }
 
 const String enumClassSource = r'''
