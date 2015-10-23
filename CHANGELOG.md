@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.6
+
+ - Check for missing import statement.
+ - Fix constraints for source_gen.
+
 ## 0.0.5
 
  - Fix generation across multiple files, allow reuse of generated identifiers.

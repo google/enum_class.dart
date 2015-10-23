@@ -29,10 +29,20 @@ class EnumClassGenerator extends Generator {
     final classElement = element as ClassElement;
     final enumName = classElement.displayName;
 
-    // TODO(davidmorgan): do this in a way that works if the import is missing.
-    if (classElement.allSupertypes
-        .where((i) => i.displayName == 'EnumClass')
-        .isEmpty) return null;
+    if (classElement.supertype.displayName != 'EnumClass') {
+      // Maybe they're trying to use EnumClass but forgot to import the library.
+      if (classElement
+          .computeNode()
+          .toSource()
+          .contains('class ${classElement.displayName} extends EnumClass')) {
+        throw new InvalidGenerationSourceError(
+            'Please make changes to use EnumClass.',
+            todo:
+                "Import EnumClass: import 'package:enum_class/enum_class.dart';");
+      } else {
+        return null;
+      }
+    }
 
     final fields = _getApplicableFields(classElement);
     final errors = concat([
