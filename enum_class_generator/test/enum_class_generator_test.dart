@@ -105,8 +105,7 @@ part of test_enum;
 '''));
     });
 
-    // TODO(davidmorgan): it would be better to fail with an error message.
-    test('fails silently on missing enum_class import', () async {
+    test('fails with error on missing enum_class import', () async {
       expect(await generate(r'''
 library test_enum;
 
@@ -122,7 +121,17 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), isEmpty);
+'''), endsWith(r'''
+part of test_enum;
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class TestEnum
+// **************************************************************************
+
+// Error: Please make changes to use EnumClass.
+// TODO: Import EnumClass: import 'package:enum_class/enum_class.dart';
+'''));
     });
 
     test('fails with error on missing part statement', () async {
