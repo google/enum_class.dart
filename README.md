@@ -1,12 +1,21 @@
 # Enum Classes for Dart
 
-Enum Classes are an extension to Dart that uses code generation to give
-common enum functionality to classes.
+## Introduction
 
-## Features
+Enum Classes provide classes with enum features and are part of
+[Libraries for Object Oriented Dart](https://github.com/google/built_value.dart/blob/master/libraries_for_object_oriented_dart.md#libraries-for-object-oriented-dart).
+
+## Motivation
+
+Enums are very helpful in modelling the real world: whenever there are a
+small fixed set of options, an enum is a natural choice. For an object
+oriented design, though, enums need to be classes. Dart falls short here,
+so Enum Classes provide what's missing!
+
+## Design
 
 * Constants have `name` and `toString`, can be used in `switch` statements,
-   and are real classes that you can add code to
+  and are real classes that can hold code and implement interfaces
 * Generated `values` method that returns all the enum values in a `BuiltSet` (immutable set)
 * Generated `valueOf` method that takes a `String`
 
