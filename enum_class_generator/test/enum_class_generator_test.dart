@@ -3,8 +3,9 @@
 // license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:io';
 
+import 'package:build/build.dart';
+import 'package:build_test/build_test.dart';
 import 'package:enum_class_generator/enum_class_generator.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
@@ -29,6 +30,8 @@ class TestEnum extends EnumClass {
 ''';
 
 final String correctOutput = r'''
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -60,39 +63,41 @@ final BuiltSet<TestEnum> _$values =
 void main() {
   group('generator', () {
     test('produces correct output for correct input', () async {
-      expect(await generate(correctInput), endsWith(correctOutput));
+      await testGenerate(correctInput, correctOutput);
     });
 
     test('produces two correct output for two correct inputs', () async {
-      expect(
-          await generateTwo(correctInput,
-              correctInput.replaceAll('test_enum', 'test_enum_two')),
-          endsWith(correctOutput.replaceAll('test_enum', 'test_enum_two')));
+      await testGenerateTwo(
+          correctInput,
+          correctInput.replaceAll('test_enum', 'test_enum_two'),
+          correctOutput,
+          correctOutput.replaceAll('test_enum', 'test_enum_two'));
     });
 
     test('allows part statement with double quotes', () async {
-      expect(
-          await generate(correctInput.replaceAll(
-              "part 'test_enum.g.dart'", 'part "test_enum.g.dart"')),
-          endsWith(correctOutput));
+      await testGenerate(
+          correctInput.replaceAll(
+              "part 'test_enum.g.dart'", 'part "test_enum.g.dart"'),
+          correctOutput);
     });
 
     test('ignores fields of different type', () async {
-      expect(
-          await generate(correctInput.replaceAll(
+      await testGenerate(
+          correctInput.replaceAll(
               'class TestEnum extends EnumClass {',
               'class TestEnum extends EnumClass {\n'
-              '  static const int anInt = 3;')),
-          endsWith(correctOutput));
+              '  static const int anInt = 3;'),
+          correctOutput);
     });
 
     test('fails on dynamic fields', () async {
-      expect(
-          await generate(correctInput.replaceAll(
+      await testGenerate(
+          correctInput.replaceAll(
               'class TestEnum extends EnumClass {',
               'class TestEnum extends EnumClass {\n'
-              '  static const anInt = 3;')),
-          endsWith(r'''
+              '  static const anInt = 3;'),
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -102,11 +107,13 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Specify a type for field "anInt".
-'''));
+''');
     });
 
     test('fails with error on missing enum_class import', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 library test_enum;
 
 part 'test_enum.g.dart';
@@ -121,7 +128,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -131,11 +140,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Import EnumClass: import 'package:enum_class/enum_class.dart';
-'''));
+''');
     });
 
     test('fails with error on missing part statement', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -152,7 +162,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -162,11 +174,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Import generated part: part 'test_enum.g.dart';
-'''));
+''');
     });
 
     test('fails with error on non-const static fields', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -183,7 +196,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -193,11 +208,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Make field "yes" const. Make field "no" const. Make field "maybe" const.
-'''));
+''');
     });
 
     test('fails with error on non-const non-static fields', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -214,7 +230,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -224,11 +242,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Make field "yes" static const. Make field "no" static const. Make field "maybe" static const.
-'''));
+''');
     });
 
     test('ignores static const fields of wrong type', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -246,11 +265,13 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(correctOutput));
+''',
+          correctOutput);
     });
 
     test('matches generated names to rhs for field names', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -267,7 +288,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -294,11 +317,12 @@ TestEnum _$valueOf(String name) {
 
 final BuiltSet<TestEnum> _$values =
     new BuiltSet<TestEnum>(const [_$no, _$maybe, _$yes,]);
-'''));
+''');
     });
 
     test('matches generated names to values and valueOf', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -315,7 +339,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$vls;
   static TestEnum valueOf(String name) => _$vlOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -342,11 +368,12 @@ TestEnum _$vlOf(String name) {
 
 final BuiltSet<TestEnum> _$vls =
     new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
-'''));
+''');
     });
 
     test('fails with error on name clash for field rhs', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -363,7 +390,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -373,11 +402,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Generated identifier "_$no" is used multiple times, change to something else.
-'''));
+''');
     });
 
     test('fails with error on name clash for values', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -394,7 +424,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$no;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -404,11 +436,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Generated identifier "_$no" is used multiple times, change to something else.
-'''));
+''');
     });
 
     test('fails with error on missing constructor', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -423,7 +456,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -433,11 +468,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Constructor: const TestEnum._(String name) : super(name);
-'''));
+''');
     });
 
     test('fails with error on incorrect constructor', () async {
-      expect(await generate(r'''
+      testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -454,7 +490,9 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -464,11 +502,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Constructor: const TestEnum._(String name) : super(name);
-'''));
+''');
     });
 
     test('fails with error on too many constructors', () async {
-      expect(await generate(r'''
+      testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -489,7 +528,9 @@ class TestEnum extends EnumClass {
 
 abstract class BuiltSet<T> {
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -499,11 +540,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Constructor: const TestEnum._(String name) : super(name);
-'''));
+''');
     });
 
     test('fails with error on missing values getter', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -519,7 +561,9 @@ class TestEnum extends EnumClass {
 
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -529,11 +573,12 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Getter: static BuiltSet<TestEnum> get values => _$values
-'''));
+''');
     });
 
     test('fails with error on missing valueOf', () async {
-      expect(await generate(r'''
+      await testGenerate(
+          r'''
 library test_enum;
 
 import 'package:enum_class/enum_class.dart';
@@ -549,7 +594,9 @@ class TestEnum extends EnumClass {
 
   static BuiltSet<TestEnum> get values => _$values;
 }
-'''), endsWith(r'''
+''',
+          r'''// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of test_enum;
 
 // **************************************************************************
@@ -559,55 +606,44 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Method: static TestEnum valueOf(String name) => _$valueOf(name)
-'''));
+''');
     });
   });
 }
 
 // Test setup.
 
-Future<String> generate(String source) async {
-  final tempDir =
-      Directory.systemTemp.createTempSync('enum_class_generator.dart.');
-  final packageDir = new Directory(tempDir.path + '/packages')..createSync();
-  final enumClassDir = new Directory(packageDir.path + '/enum_class')
-    ..createSync();
-  final enumClassFile = new File(enumClassDir.path + '/enum_class.dart')
-    ..createSync();
-  enumClassFile.writeAsStringSync(enumClassSource);
+final String pkgName = 'pkg';
+final PackageGraph packageGraph =
+    new PackageGraph.fromRoot(new PackageNode(pkgName, null, null, null));
 
-  final libDir = new Directory(tempDir.path + '/lib')..createSync();
-  final sourceFile = new File(libDir.path + '/test_enum.dart');
-  sourceFile.writeAsStringSync(source);
+final PhaseGroup phaseGroup = new PhaseGroup.singleAction(
+    new GeneratorBuilder([new EnumClassGenerator()]),
+    new InputSet(pkgName, const ['lib/*.dart']));
 
-  await build([], [new EnumClassGenerator()],
-      projectPath: tempDir.path, librarySearchPaths: <String>['lib']);
-  final outputFile = new File(libDir.path + '/test_enum.g.dart');
-  return outputFile.existsSync() ? outputFile.readAsStringSync() : '';
+Future testGenerate(String source, String expectedOutput) async {
+  final srcs = <String, String>{
+    'enum_class|lib/enum_class.dart': enumClassSource,
+    '$pkgName|lib/test_enum.dart': source,
+  };
+
+  await testPhases(phaseGroup, srcs,
+      packageGraph: packageGraph,
+      outputs: {'$pkgName|lib/test_enum.g.dart': expectedOutput});
 }
 
-Future<String> generateTwo(String source, String source2) async {
-  final tempDir =
-      Directory.systemTemp.createTempSync('enum_class_generator.dart.');
-  final packageDir = new Directory(tempDir.path + '/packages')..createSync();
-  final enumClassDir = new Directory(packageDir.path + '/enum_class')
-    ..createSync();
-  final enumClassFile = new File(enumClassDir.path + '/enum_class.dart')
-    ..createSync();
-  enumClassFile.writeAsStringSync(enumClassSource);
+Future testGenerateTwo(String source, String source2, String expectedOutput,
+    String expectedOutput2) async {
+  final srcs = {
+    'enum_class|lib/enum_class.dart': enumClassSource,
+    '$pkgName|lib/test_enum.dart': source,
+    '$pkgName|lib/test_enum_two.dart': source2
+  };
 
-  final libDir = new Directory(tempDir.path + '/lib')..createSync();
-  final sourceFile = new File(libDir.path + '/test_enum.dart');
-  sourceFile.writeAsStringSync(source);
-  final sourceFile2 = new File(libDir.path + '/test_enum_two.dart');
-  sourceFile2.writeAsStringSync(source2);
-
-  await build([], [new EnumClassGenerator()],
-      projectPath: tempDir.path, librarySearchPaths: <String>['lib']);
-  final outputFile = new File(libDir.path + '/test_enum.g.dart');
-  final outputFile2 = new File(libDir.path + '/test_enum_two.g.dart');
-  return (outputFile.existsSync() ? outputFile.readAsStringSync() : '') +
-      (outputFile2.existsSync() ? outputFile2.readAsStringSync() : '');
+  await testPhases(phaseGroup, srcs, packageGraph: packageGraph, outputs: {
+    '$pkgName|lib/test_enum.g.dart': expectedOutput,
+    '$pkgName|lib/test_enum_two.g.dart': expectedOutput2,
+  });
 }
 
 const String enumClassSource = r'''
@@ -620,12 +656,5 @@ class EnumClass {
 
   @override
   String toString() => name;
-}
-''';
-
-const String builtCollectionSource = r'''
-library built_collection;
-
-abstract class BuiltSet<E> {
 }
 ''';
