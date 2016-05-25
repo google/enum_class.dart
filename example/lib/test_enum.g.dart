@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2015-10-21T06:26:57.002Z
 
 part of test_enum;
 

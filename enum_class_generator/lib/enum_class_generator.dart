@@ -5,9 +5,10 @@
 library enum_class_generator;
 
 import 'dart:async';
-import 'package:quiver/iterables.dart' show concat;
 
-import 'package:analyzer/src/generated/element.dart';
+import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart';
+import 'package:quiver/iterables.dart' show concat;
 import 'package:source_gen/source_gen.dart';
 
 /// Generator for Enum Classes.
@@ -17,7 +18,8 @@ import 'package:source_gen/source_gen.dart';
 class EnumClassGenerator extends Generator {
   Set<String> _usedGeneratedIdentifiers = new Set<String>();
 
-  Future<String> generate(Element element) async {
+  @override
+  Future<String> generate(Element element, BuildStep buildStep) async {
     // Generated identifiers only have to be unique per library, reset for
     // each new library.
     if (element is LibraryElement) {
