@@ -27,6 +27,17 @@ TestEnum _$valueOf(String name) {
 final BuiltSet<TestEnum> _$values =
     new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
 
+class _$TestEnumMeta {
+  const _$TestEnumMeta();
+  TestEnum get yes => _$yes;
+  TestEnum get no => _$no;
+  TestEnum get maybe => _$maybe;
+}
+
+abstract class _$TestEnumMixin {
+  _$TestEnumMeta get TestEnum => const _$TestEnumMeta();
+}
+
 // **************************************************************************
 // Generator: EnumClassGenerator
 // Target: class SecondTestEnum

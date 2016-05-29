@@ -27,6 +27,8 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
+
+abstract class TestEnumMixin = Object with _$TestEnumMixin;
 ''';
 
 final String correctOutput = r'''
@@ -56,6 +58,17 @@ TestEnum _$valueOf(String name) {
 
 final BuiltSet<TestEnum> _$values =
     new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
+
+class _$TestEnumMeta {
+  const _$TestEnumMeta();
+  TestEnum get yes => _$yes;
+  TestEnum get no => _$no;
+  TestEnum get maybe => _$maybe;
+}
+
+abstract class _$TestEnumMixin {
+  _$TestEnumMeta get TestEnum => const _$TestEnumMeta();
+}
 ''';
 
 void main() {
@@ -247,6 +260,8 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
+
+abstract class TestEnumMixin = Object with _$TestEnumMixin;
 '''), endsWith(correctOutput));
     });
 
@@ -560,6 +575,37 @@ part of test_enum;
 
 // Error: Please make changes to use EnumClass.
 // TODO: Method: static TestEnum valueOf(String name) => _$valueOf(name)
+'''));
+    });
+
+    test('fails with error on wrong mixin declaration', () async {
+      expect(await generate(r'''
+library test_enum;
+
+import 'package:enum_class/enum_class.dart';
+
+part 'test_enum.g.dart';
+
+class TestEnum extends EnumClass {
+  static const TestEnum yes = _$yes;
+
+  const TestEnum._(String name) : super(name);
+
+  static BuiltSet<TestEnum> get values => _$values;
+  static TestEnum valueOf(String name) => _$valueOf(name);
+}
+
+class TestEnumMixin = Object with _$TestEnumMixin;
+'''), endsWith(r'''
+part of test_enum;
+
+// **************************************************************************
+// Generator: EnumClassGenerator
+// Target: class TestEnum
+// **************************************************************************
+
+// Error: Please make changes to use EnumClass.
+// TODO: Mixin: abstract class TestEnumMixin = Object with _$TestEnumMixin;
 '''));
     });
   });

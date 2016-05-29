@@ -53,7 +53,17 @@ class EnumClassGenerator extends Generator {
       _checkConstructor(classElement),
       _checkValuesGetter(classElement),
       _checkValueOf(classElement)
-    ]);
+    ]).toList();
+
+    final mixinElement = classElement.library.getType(enumName + 'Mixin');
+    final generateMixin = mixinElement != null;
+    if (generateMixin) {
+      final expectedCode =
+          'abstract class ${enumName}Mixin = Object with _\$${enumName}Mixin;';
+      if (mixinElement.computeNode().toString() != expectedCode) {
+        errors.add('Mixin: $expectedCode');
+      }
+    }
 
     if (errors.isNotEmpty) {
       throw new InvalidGenerationSourceError(
@@ -61,7 +71,7 @@ class EnumClassGenerator extends Generator {
           todo: errors.join(' '));
     }
 
-    return _generateCode(classElement, enumName, fields);
+    return _generateCode(classElement, enumName, fields, generateMixin);
   }
 
   Iterable<String> _checkPart(ClassElement classElement) {
@@ -81,8 +91,8 @@ class EnumClassGenerator extends Generator {
     final result = <FieldElement>[];
     for (final field in classElement.fields) {
       final type = field.getter.returnType.displayName;
-      if (!field.isSynthetic && (type == enumName || type == 'dynamic')) result
-          .add(field);
+      if (!field.isSynthetic && (type == enumName || type == 'dynamic'))
+        result.add(field);
     }
     return result;
   }
@@ -171,7 +181,7 @@ class EnumClassGenerator extends Generator {
   }
 
   String _generateCode(ClassElement classElement, String enumName,
-      Iterable<FieldElement> fields) {
+      Iterable<FieldElement> fields, bool generateMixin) {
     final result = new StringBuffer();
 
     for (final field in fields) {
@@ -205,6 +215,22 @@ class EnumClassGenerator extends Generator {
     }
     result.writeln(']);');
 
+    if (generateMixin) {
+      result.writeln('class _\$${enumName}Meta {');
+      result.writeln('const _\$${enumName}Meta();');
+      for (final field in fields) {
+        final fieldName = field.displayName;
+        result
+            .writeln('$enumName get $fieldName => _\$${_getGeneratedIdentifier(
+                field)};');
+      }
+      result.writeln('}');
+      result.writeln('abstract class _\$${enumName}Mixin {');
+      result.writeln(
+          '_\$${enumName}Meta get $enumName => const _\$${enumName}Meta();');
+      result.writeln('}');
+    }
+
     return result.toString();
   }
 
@@ -215,8 +241,9 @@ class EnumClassGenerator extends Generator {
 
   String _getValueOfIdentifier(String source, String enumName) {
     final matches = new RegExp(r'static ' +
-        enumName +
-        r' valueOf\(String name\) \=\> \_\$(\w+)\(name\)\;').allMatches(source);
+            enumName +
+            r' valueOf\(String name\) \=\> \_\$(\w+)\(name\)\;')
+        .allMatches(source);
     return matches.isEmpty ? null : matches.first.group(1);
   }
 
