@@ -1,5 +1,5 @@
 name: example
-version: 0.2.0
+version: 0.2.1
 description: >
   Just an example, not for publishing.
 authors:
@@ -10,7 +10,7 @@ environment:
   sdk: '>=1.8.0 <2.0.0'
 
 dependencies:
-  enum_class: '^0.2.0'
+  enum_class: '^0.2.1'
 
 dev_dependencies:
-  enum_class_generator: '^0.2.0'
+  enum_class_generator: '^0.2.1'

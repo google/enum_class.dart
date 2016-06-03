@@ -608,6 +608,32 @@ part of test_enum;
 // TODO: Mixin: abstract class TestEnumMixin = Object with _$TestEnumMixin;
 '''));
     });
+
+    test('is robust to newlines in input', () async {
+      expect(await generate(r'''
+library test_enum;
+
+import 'package:enum_class/enum_class.dart';
+
+part 'test_enum.g.dart';
+
+class TestEnum extends EnumClass {
+  static const TestEnum yes = _$yes;
+  static const TestEnum no = _$no;
+  static const TestEnum maybe = _$maybe;
+
+  const TestEnum._(String name)
+      : super(name);
+
+  static BuiltSet<TestEnum> get values =>
+      _$values;
+  static TestEnum valueOf(String name) =>
+      _$valueOf(name);
+}
+
+abstract class TestEnumMixin = Object with _$TestEnumMixin;
+'''), endsWith(correctOutput));
+    });
   });
 }
 

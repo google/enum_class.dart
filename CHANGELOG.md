@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- Check value and valueOf using analyzed nodes instead of raw source.
+  Makes generation robust to newlines in these declarations.
+
 ## 0.2.0
 
 - Add mixin generation for use with Angular templates.
