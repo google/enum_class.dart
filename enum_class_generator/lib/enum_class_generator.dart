@@ -132,10 +132,8 @@ class EnumClassGenerator extends Generator {
 
   Iterable<String> _checkValuesGetter(
       String libraryName, ClassElement classElement) {
-    // TODO(davidmorgan): do this without reading the whole source.
     final enumName = classElement.displayName;
-    final valuesIdentifier =
-        _getValuesIdentifier(classElement.source.contents.data, enumName);
+    final valuesIdentifier = _getValuesIdentifier(classElement, enumName);
     final result = <String>[];
     if (valuesIdentifier == null) {
       result.add('Getter: static BuiltSet<$enumName> get values => _\$values');
@@ -148,12 +146,8 @@ class EnumClassGenerator extends Generator {
 
   Iterable<String> _checkValueOf(
       String libraryName, ClassElement classElement) {
-    // TODO(davidmorgan): do this without reading the whole source.
     final enumName = classElement.displayName;
-
-    final valueOfIdentifier =
-        _getValueOfIdentifier(classElement.source.contents.data, enumName);
-
+    final valueOfIdentifier = _getValueOfIdentifier(classElement, enumName);
     final result = <String>[];
     if (valueOfIdentifier == null) {
       result.add(
@@ -191,8 +185,7 @@ class EnumClassGenerator extends Generator {
 
     result.writeln('');
 
-    final valueOf =
-        _getValueOfIdentifier(classElement.source.contents.data, enumName);
+    final valueOf = _getValueOfIdentifier(classElement, enumName);
     result.writeln('$enumName _\$$valueOf(String name) {'
         'switch (name) {');
     for (final field in fields) {
@@ -205,8 +198,7 @@ class EnumClassGenerator extends Generator {
 
     result.writeln('');
 
-    final values =
-        _getValuesIdentifier(classElement.source.contents.data, enumName);
+    final values = _getValuesIdentifier(classElement, enumName);
     result.writeln('final BuiltSet<$enumName> _\$$values ='
         'new BuiltSet<$enumName>(const [');
     for (final field in fields) {
@@ -243,7 +235,10 @@ class EnumClassGenerator extends Generator {
     return field.computeNode().toString().substring('$fieldName = _\$'.length);
   }
 
-  String _getValueOfIdentifier(String source, String enumName) {
+  String _getValueOfIdentifier(ClassElement classElement, String enumName) {
+    final getter = classElement.getMethod('valueOf');
+    if (getter == null) return null;
+    final source = getter.computeNode().toSource();
     final matches = new RegExp(r'static ' +
             enumName +
             r' valueOf\(String name\) \=\> \_\$(\w+)\(name\)\;')
@@ -251,7 +246,10 @@ class EnumClassGenerator extends Generator {
     return matches.isEmpty ? null : matches.first.group(1);
   }
 
-  String _getValuesIdentifier(String source, String enumName) {
+  String _getValuesIdentifier(ClassElement classElement, String enumName) {
+    final getter = classElement.getGetter('values');
+    if (getter == null) return null;
+    final source = getter.computeNode().toSource();
     final matches = new RegExp(
             r'static BuiltSet<' + enumName + r'> get values => _\$(\w+)\;')
         .allMatches(source);

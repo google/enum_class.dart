@@ -3,6 +3,8 @@
 ## 0.2.1
 
 - Make duplicate generated name detection more robust.
+- Check value and valueOf using analyzed nodes instead of raw source.
+  Makes generation robust to newlines in these declarations.
 
 ## 0.2.0
 
