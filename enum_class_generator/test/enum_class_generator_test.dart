@@ -388,7 +388,7 @@ part of test_enum;
 // **************************************************************************
 
 // Error: Please make changes to use EnumClass.
-// TODO: Generated identifier "_$no" is used multiple times, change to something else.
+// TODO: Generated identifier "_$no" is used multiple times in test_enum, change to something else.
 '''));
     });
 
@@ -419,8 +419,15 @@ part of test_enum;
 // **************************************************************************
 
 // Error: Please make changes to use EnumClass.
-// TODO: Generated identifier "_$no" is used multiple times, change to something else.
+// TODO: Generated identifier "_$no" is used multiple times in test_enum, change to something else.
 '''));
+    });
+
+    test('does not fail with clash across multiple files', () async {
+      expect(
+          await generateTwo(correctInput,
+              correctInput.replaceAll('test_enum', 'test_enum_two')),
+          endsWith(correctOutput.replaceAll('test_enum', 'test_enum_two')));
     });
 
     test('fails with error on missing constructor', () async {
@@ -617,7 +624,9 @@ final String pkgName = 'pkg';
 final PackageGraph packageGraph =
     new PackageGraph.fromRoot(new PackageNode(pkgName, null, null, null));
 
-final PhaseGroup phaseGroup = new PhaseGroup.singleAction(
+// Recreate EnumClassGenerator for each test because we repeatedly create
+// enums with the same name in the same library, which will clash.
+PhaseGroup get phaseGroup => new PhaseGroup.singleAction(
     new GeneratorBuilder([new EnumClassGenerator()]),
     new InputSet(pkgName, const ['lib/*.dart']));
 

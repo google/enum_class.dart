@@ -20,11 +20,6 @@ class EnumClassGenerator extends Generator {
 
   @override
   Future<String> generate(Element element, BuildStep buildStep) async {
-    // Generated identifiers only have to be unique per library, reset for
-    // each new library.
-    if (element is LibraryElement) {
-      _usedGeneratedIdentifiers = new Set<String>();
-    }
     if (element is! ClassElement) {
       return null;
     }
@@ -46,13 +41,14 @@ class EnumClassGenerator extends Generator {
       }
     }
 
+    final libraryName = classElement.library.displayName;
     final fields = _getApplicableFields(classElement);
     final errors = concat([
       _checkPart(classElement),
-      _checkFields(fields),
+      _checkFields(libraryName, fields),
       _checkConstructor(classElement),
-      _checkValuesGetter(classElement),
-      _checkValueOf(classElement)
+      _checkValuesGetter(libraryName, classElement),
+      _checkValueOf(libraryName, classElement)
     ]).toList();
 
     final mixinElement = classElement.library.getType(enumName + 'Mixin');
@@ -98,7 +94,8 @@ class EnumClassGenerator extends Generator {
     return result;
   }
 
-  Iterable<String> _checkFields(Iterable<FieldElement> fields) {
+  Iterable<String> _checkFields(
+      String libraryName, Iterable<FieldElement> fields) {
     final result = <String>[];
     for (final field in fields) {
       final fieldName = field.displayName;
@@ -119,12 +116,8 @@ class EnumClassGenerator extends Generator {
       }
 
       final identifier = _getGeneratedIdentifier(field);
-      if (_usedGeneratedIdentifiers.contains(identifier)) {
-        result
-            .add('Generated identifier "_\$$identifier" is used multiple times,'
-                ' change to something else.');
-      }
-      _usedGeneratedIdentifiers.add(identifier);
+      result.addAll(
+          _checkAndRegisterGeneratedIdentifier(libraryName, identifier));
     }
     return result;
   }
@@ -137,48 +130,53 @@ class EnumClassGenerator extends Generator {
             expectedCode ? <String>[] : <String>['Constructor: $expectedCode'];
   }
 
-  Iterable<String> _checkValuesGetter(ClassElement classElement) {
+  Iterable<String> _checkValuesGetter(
+      String libraryName, ClassElement classElement) {
     // TODO(davidmorgan): do this without reading the whole source.
     final enumName = classElement.displayName;
     final valuesIdentifier =
         _getValuesIdentifier(classElement.source.contents.data, enumName);
+    final result = <String>[];
     if (valuesIdentifier == null) {
-      return <String>[
-        'Getter: static BuiltSet<$enumName> get values => _\$values'
-      ];
+      result.add('Getter: static BuiltSet<$enumName> get values => _\$values');
     } else {
-      if (_usedGeneratedIdentifiers.contains(valuesIdentifier)) {
-        return <String>[
-          'Generated identifier "_\$$valuesIdentifier" is used multiple times,'
-              ' change to something else.'
-        ];
-      } else {
-        return <String>[];
-      }
+      result.addAll(
+          _checkAndRegisterGeneratedIdentifier(libraryName, valuesIdentifier));
     }
+    return result;
   }
 
-  Iterable<String> _checkValueOf(ClassElement classElement) {
+  Iterable<String> _checkValueOf(
+      String libraryName, ClassElement classElement) {
     // TODO(davidmorgan): do this without reading the whole source.
     final enumName = classElement.displayName;
 
     final valueOfIdentifier =
         _getValueOfIdentifier(classElement.source.contents.data, enumName);
 
+    final result = <String>[];
     if (valueOfIdentifier == null) {
-      return <String>[
-        'Method: static $enumName valueOf(String name) => _\$valueOf(name)'
-      ];
+      result.add(
+          'Method: static $enumName valueOf(String name) => _\$valueOf(name)');
     } else {
-      if (_usedGeneratedIdentifiers.contains(valueOfIdentifier)) {
-        return <String>[
-          'Generated identifier "_\$$valueOfIdentifier" is used multiple times,'
-              ' change to something else.'
-        ];
-      } else {
-        return <String>[];
-      }
+      result.addAll(
+          _checkAndRegisterGeneratedIdentifier(libraryName, valueOfIdentifier));
     }
+    return result;
+  }
+
+  Iterable<String> _checkAndRegisterGeneratedIdentifier(
+      String libraryName, String identifier) {
+    final result = <String>[];
+    final scopedIdentifier = '$libraryName.$identifier';
+    if (_usedGeneratedIdentifiers.contains(scopedIdentifier)) {
+      result
+          .add('Generated identifier "_\$$identifier" is used multiple times in'
+              ' $libraryName, change to something else.');
+    } else {
+      _usedGeneratedIdentifiers.add(scopedIdentifier);
+    }
+    return result;
   }
 
   String _generateCode(ClassElement classElement, String enumName,
@@ -228,8 +226,7 @@ class EnumClassGenerator extends Generator {
     result.writeln('const _\$${enumName}Meta();');
     for (final field in fields) {
       final fieldName = field.displayName;
-      result
-          .writeln('$enumName get $fieldName => _\$${_getGeneratedIdentifier(
+      result.writeln('$enumName get $fieldName => _\$${_getGeneratedIdentifier(
           field)};');
     }
     result.writeln('}');
