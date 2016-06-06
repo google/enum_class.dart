@@ -64,6 +64,8 @@ class _$TestEnumMeta {
   TestEnum get yes => _$yes;
   TestEnum get no => _$no;
   TestEnum get maybe => _$maybe;
+  TestEnum valueOf(String name) => _$valueOf(name);
+  BuiltSet<TestEnum> get values => _$values;
 }
 
 abstract class _$TestEnumMixin {

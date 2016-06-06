@@ -206,12 +206,14 @@ class EnumClassGenerator extends Generator {
     }
     result.writeln(']);');
 
-    if (generateMixin) result.write(_generateMixin(enumName, fields));
+    if (generateMixin)
+      result.write(_generateMixin(enumName, fields, valueOf, values));
 
     return result.toString();
   }
 
-  String _generateMixin(String enumName, Iterable<FieldElement> fields) {
+  String _generateMixin(String enumName, Iterable<FieldElement> fields,
+      String valueOfIdentifier, String valuesIdentifier) {
     final result = new StringBuffer();
 
     result.writeln('class _\$${enumName}Meta {');
@@ -221,6 +223,9 @@ class EnumClassGenerator extends Generator {
       result.writeln('$enumName get $fieldName => _\$${_getGeneratedIdentifier(
           field)};');
     }
+    result.writeln(
+        '$enumName valueOf(String name) => _\$$valueOfIdentifier(name);');
+    result.writeln('BuiltSet<$enumName> get values => _\$$valuesIdentifier;');
     result.writeln('}');
     result.writeln('abstract class _\$${enumName}Mixin {');
     result.writeln(
