@@ -2,6 +2,7 @@
 
 ## 0.2.1
 
+- Add values and valueOf to generated mixin for use in Angular templates.
 - Make duplicate generated name detection more robust.
 - Check value and valueOf using analyzed nodes instead of raw source.
   Makes generation robust to newlines in these declarations.
