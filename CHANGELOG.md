@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Make duplicate generated name detection more robust.
+
 ## 0.2.0
 
 - Add mixin generation for use with Angular templates.
