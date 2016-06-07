@@ -116,8 +116,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Specify a type for field "anInt".
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Specify a type for field "anInt".
 '''));
     });
 
@@ -145,8 +146,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Import EnumClass: import 'package:enum_class/enum_class.dart';
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Import EnumClass: import 'package:enum_class/enum_class.dart';
 '''));
     });
 
@@ -176,8 +178,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Import generated part: part 'test_enum.g.dart';
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Import generated part: part 'test_enum.g.dart';
 '''));
     });
 
@@ -207,8 +210,11 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Make field "yes" const. Make field "no" const. Make field "maybe" const.
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Make field "yes" const.
+//        2. Make field "no" const.
+//        3. Make field "maybe" const.
 '''));
     });
 
@@ -238,8 +244,11 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Make field "yes" static const. Make field "no" static const. Make field "maybe" static const.
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Make field "yes" static const.
+//        2. Make field "no" static const.
+//        3. Make field "maybe" static const.
 '''));
     });
 
@@ -389,8 +398,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Generated identifier "_$no" is used multiple times in test_enum, change to something else.
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Generated identifier "_$no" is used multiple times in test_enum, change to something else.
 '''));
     });
 
@@ -420,8 +430,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Generated identifier "_$no" is used multiple times in test_enum, change to something else.
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Generated identifier "_$no" is used multiple times in test_enum, change to something else.
 '''));
     });
 
@@ -456,8 +467,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Constructor: const TestEnum._(String name) : super(name);
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Have exactly one constructor: const TestEnum._(String name) : super(name);
 '''));
     });
 
@@ -487,8 +499,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Constructor: const TestEnum._(String name) : super(name);
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Have exactly one constructor: const TestEnum._(String name) : super(name);
 '''));
     });
 
@@ -522,8 +535,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Constructor: const TestEnum._(String name) : super(name);
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Have exactly one constructor: const TestEnum._(String name) : super(name);
 '''));
     });
 
@@ -552,8 +566,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Getter: static BuiltSet<TestEnum> get values => _$values
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Add getter: static BuiltSet<TestEnum> get values => _$values
 '''));
     });
 
@@ -582,8 +597,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Method: static TestEnum valueOf(String name) => _$valueOf(name)
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Add method: static TestEnum valueOf(String name) => _$valueOf(name)
 '''));
     });
 
@@ -613,8 +629,9 @@ part of test_enum;
 // Target: class TestEnum
 // **************************************************************************
 
-// Error: Please make changes to use EnumClass.
-// TODO: Mixin: abstract class TestEnumMixin = Object with _$TestEnumMixin;
+// Error: Please make the following changes to use EnumClass:
+//
+//        1. Remove mixin or declare using exactly: abstract class TestEnumMixin = Object with _$TestEnumMixin;
 '''));
     });
 

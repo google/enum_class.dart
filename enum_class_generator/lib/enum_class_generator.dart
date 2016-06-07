@@ -32,10 +32,8 @@ class EnumClassGenerator extends Generator {
           .computeNode()
           .toSource()
           .contains('class ${classElement.displayName} extends EnumClass')) {
-        throw new InvalidGenerationSourceError(
-            'Please make changes to use EnumClass.',
-            todo:
-                "Import EnumClass: import 'package:enum_class/enum_class.dart';");
+        throw _makeError(
+            ["Import EnumClass: import 'package:enum_class/enum_class.dart';"]);
       } else {
         return null;
       }
@@ -57,14 +55,12 @@ class EnumClassGenerator extends Generator {
       final expectedCode =
           'abstract class ${enumName}Mixin = Object with _\$${enumName}Mixin;';
       if (mixinElement.computeNode().toString() != expectedCode) {
-        errors.add('Mixin: $expectedCode');
+        errors.add('Remove mixin or declare using exactly: $expectedCode');
       }
     }
 
     if (errors.isNotEmpty) {
-      throw new InvalidGenerationSourceError(
-          'Please make changes to use EnumClass.',
-          todo: errors.join(' '));
+      throw _makeError(errors);
     }
 
     return _generateCode(classElement, enumName, fields, shouldGenerateMixin);
@@ -126,8 +122,10 @@ class EnumClassGenerator extends Generator {
     final enumName = classElement.displayName;
     final expectedCode = 'const $enumName._(String name) : super(name);';
     return classElement.constructors.length == 1 &&
-        classElement.constructors.single.computeNode().toString() ==
-            expectedCode ? <String>[] : <String>['Constructor: $expectedCode'];
+            classElement.constructors.single.computeNode().toString() ==
+                expectedCode
+        ? <String>[]
+        : <String>['Have exactly one constructor: $expectedCode'];
   }
 
   Iterable<String> _checkValuesGetter(
@@ -136,7 +134,8 @@ class EnumClassGenerator extends Generator {
     final valuesIdentifier = _getValuesIdentifier(classElement, enumName);
     final result = <String>[];
     if (valuesIdentifier == null) {
-      result.add('Getter: static BuiltSet<$enumName> get values => _\$values');
+      result.add(
+          'Add getter: static BuiltSet<$enumName> get values => _\$values');
     } else {
       result.addAll(
           _checkAndRegisterGeneratedIdentifier(libraryName, valuesIdentifier));
@@ -150,8 +149,8 @@ class EnumClassGenerator extends Generator {
     final valueOfIdentifier = _getValueOfIdentifier(classElement, enumName);
     final result = <String>[];
     if (valueOfIdentifier == null) {
-      result.add(
-          'Method: static $enumName valueOf(String name) => _\$valueOf(name)');
+      result.add('Add method: '
+          'static $enumName valueOf(String name) => _\$valueOf(name)');
     } else {
       result.addAll(
           _checkAndRegisterGeneratedIdentifier(libraryName, valueOfIdentifier));
@@ -259,5 +258,15 @@ class EnumClassGenerator extends Generator {
             r'static BuiltSet<' + enumName + r'> get values => _\$(\w+)\;')
         .allMatches(source);
     return matches.isEmpty ? null : matches.first.group(1);
+  }
+
+  InvalidGenerationSourceError _makeError(Iterable<String> todos) {
+    final message = new StringBuffer(
+        'Please make the following changes to use EnumClass:\n');
+    for (var i = 0; i != todos.length; ++i) {
+      message.write('\n${i + 1}. ${todos.elementAt(i)}');
+    }
+
+    return new InvalidGenerationSourceError(message.toString());
   }
 }
