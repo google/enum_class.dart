@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Improve error output on failure to generate.
+
 ## 0.2.1
 
 - Add values and valueOf to generated mixin for use in Angular templates.
