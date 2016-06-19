@@ -1,5 +1,5 @@
 # Enum Classes for Dart
-
+[![Build Status](https://travis-ci.org/google/enum_class.dart.svg?branch=master)](https://travis-ci.org/google/enum_class.dart)
 ## Introduction
 
 Enum Classes provide classes with enum features and are part of
