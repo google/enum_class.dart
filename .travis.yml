@@ -1,0 +1,9 @@
+language: dart
+dart: stable
+script:
+  - cd enum_class_generator
+  - pub get
+  - pub run test
+  - cd ../example
+  - pub get
+  - pub run test
