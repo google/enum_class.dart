@@ -6,4 +6,4 @@ script:
   - pub run test
   - cd ../example
   - pub get
-  - pub run test
+  - pub run tool/build.dart
