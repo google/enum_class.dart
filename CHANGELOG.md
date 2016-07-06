@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+- API now stable.
+- Refactor generator to split into logical classes.
+- Fix "watch mode": check for duplicate identifiers per library.
+
 ## 0.2.2
 
 - Improve error output on failure to generate.
