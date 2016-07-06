@@ -4,7 +4,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 const TestEnum _$yes = const TestEnum._('yes');
@@ -39,11 +39,6 @@ class _$TestEnumMeta {
 abstract class _$TestEnumMixin {
   _$TestEnumMeta get TestEnum => const _$TestEnumMeta();
 }
-
-// **************************************************************************
-// Generator: EnumClassGenerator
-// Target: class SecondTestEnum
-// **************************************************************************
 
 const SecondTestEnum _$ys = const SecondTestEnum._('yes');
 const SecondTestEnum _$n = const SecondTestEnum._('no');

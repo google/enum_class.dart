@@ -36,7 +36,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 const TestEnum _$yes = const TestEnum._('yes');
@@ -113,7 +113,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -143,7 +143,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -170,12 +170,12 @@ class TestEnum extends EnumClass {
   static BuiltSet<TestEnum> get values => _$values;
   static TestEnum valueOf(String name) => _$valueOf(name);
 }
-'''), endsWith(r'''
+'''), contains(r'''
 part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -207,7 +207,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -241,7 +241,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -299,7 +299,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 const TestEnum _$no = const TestEnum._('yes');
@@ -347,7 +347,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 const TestEnum _$yes = const TestEnum._('yes');
@@ -395,7 +395,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -427,7 +427,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -464,7 +464,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -496,7 +496,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -532,7 +532,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -563,7 +563,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -594,7 +594,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:
@@ -626,7 +626,7 @@ part of test_enum;
 
 // **************************************************************************
 // Generator: EnumClassGenerator
-// Target: class TestEnum
+// Target: library test_enum
 // **************************************************************************
 
 // Error: Please make the following changes to use EnumClass:

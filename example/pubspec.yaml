@@ -10,7 +10,11 @@ environment:
   sdk: '>=1.8.0 <2.0.0'
 
 dependencies:
-  enum_class: '^0.2.2'
+#  enum_class: '^1.0.0'
+  enum_class:
+    path: ../enum_class
 
 dev_dependencies:
-  enum_class_generator: '^0.2.2'
+#  enum_class_generator: '^1.0.0'
+  enum_class_generator:
+    path: ../enum_class_generator
