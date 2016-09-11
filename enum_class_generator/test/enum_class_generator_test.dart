@@ -56,8 +56,11 @@ TestEnum _$valueOf(String name) {
   }
 }
 
-final BuiltSet<TestEnum> _$values =
-    new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
+final BuiltSet<TestEnum> _$values = new BuiltSet<TestEnum>(const [
+  _$yes,
+  _$no,
+  _$maybe,
+]);
 
 class _$TestEnumMeta {
   const _$TestEnumMeta();
@@ -319,8 +322,11 @@ TestEnum _$valueOf(String name) {
   }
 }
 
-final BuiltSet<TestEnum> _$values =
-    new BuiltSet<TestEnum>(const [_$no, _$maybe, _$yes,]);
+final BuiltSet<TestEnum> _$values = new BuiltSet<TestEnum>(const [
+  _$no,
+  _$maybe,
+  _$yes,
+]);
 '''));
     });
 
@@ -367,8 +373,11 @@ TestEnum _$vlOf(String name) {
   }
 }
 
-final BuiltSet<TestEnum> _$vls =
-    new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
+final BuiltSet<TestEnum> _$vls = new BuiltSet<TestEnum>(const [
+  _$yes,
+  _$no,
+  _$maybe,
+]);
 '''));
     });
 
