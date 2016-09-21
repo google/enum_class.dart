@@ -24,8 +24,11 @@ TestEnum _$valueOf(String name) {
   }
 }
 
-final BuiltSet<TestEnum> _$values =
-    new BuiltSet<TestEnum>(const [_$yes, _$no, _$maybe,]);
+final BuiltSet<TestEnum> _$values = new BuiltSet<TestEnum>(const [
+  _$yes,
+  _$no,
+  _$maybe,
+]);
 
 class _$TestEnumMeta {
   const _$TestEnumMeta();
@@ -57,5 +60,8 @@ SecondTestEnum _$vlOf(String name) {
   }
 }
 
-final BuiltSet<SecondTestEnum> _$vls =
-    new BuiltSet<SecondTestEnum>(const [_$ys, _$n, _$definitely,]);
+final BuiltSet<SecondTestEnum> _$vls = new BuiltSet<SecondTestEnum>(const [
+  _$ys,
+  _$n,
+  _$definitely,
+]);

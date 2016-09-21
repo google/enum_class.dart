@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+- Upgrade analyzer, build and source_gen dependencies.
+
 ## 1.0.0
 
 - API now stable.
