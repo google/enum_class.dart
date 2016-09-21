@@ -15,6 +15,7 @@ class _$SourceClass extends SourceClass {
   final String valueOfIdentifier;
   final bool usesMixin;
   final String mixinDeclaration;
+
   _$SourceClass._(
       {this.name,
       this.fields,
@@ -29,11 +30,15 @@ class _$SourceClass extends SourceClass {
     if (constructors == null) throw new ArgumentError('null constructors');
     if (usesMixin == null) throw new ArgumentError('null usesMixin');
   }
+
   factory _$SourceClass([updates(SourceClassBuilder b)]) =>
       (new SourceClassBuilder()..update(updates)).build();
+
   SourceClass rebuild(updates(SourceClassBuilder b)) =>
       (toBuilder()..update(updates)).build();
+
   _$SourceClassBuilder toBuilder() => new _$SourceClassBuilder()..replace(this);
+
   bool operator ==(other) {
     if (other is! SourceClass) return false;
     return name == other.name &&
@@ -59,13 +64,13 @@ class _$SourceClass extends SourceClass {
 
   String toString() {
     return 'SourceClass {'
-        'name=${name.toString()}\n'
-        'fields=${fields.toString()}\n'
-        'constructors=${constructors.toString()}\n'
-        'valuesIdentifier=${valuesIdentifier.toString()}\n'
-        'valueOfIdentifier=${valueOfIdentifier.toString()}\n'
-        'usesMixin=${usesMixin.toString()}\n'
-        'mixinDeclaration=${mixinDeclaration.toString()}\n'
+        'name=${name.toString()},\n'
+        'fields=${fields.toString()},\n'
+        'constructors=${constructors.toString()},\n'
+        'valuesIdentifier=${valuesIdentifier.toString()},\n'
+        'valueOfIdentifier=${valueOfIdentifier.toString()},\n'
+        'usesMixin=${usesMixin.toString()},\n'
+        'mixinDeclaration=${mixinDeclaration.toString()},\n'
         '}';
   }
 }
@@ -87,10 +92,6 @@ class _$SourceClassBuilder extends SourceClassBuilder {
   }
 
   SourceClass build() {
-    if (name == null) throw new ArgumentError('null name');
-    if (fields == null) throw new ArgumentError('null fields');
-    if (constructors == null) throw new ArgumentError('null constructors');
-    if (usesMixin == null) throw new ArgumentError('null usesMixin');
     return new _$SourceClass._(
         name: name,
         fields: fields?.build(),
