@@ -13,6 +13,7 @@ class _$SourceField extends SourceField {
   final String generatedIdentifier;
   final bool isConst;
   final bool isStatic;
+
   _$SourceField._(
       {this.name,
       this.type,
@@ -27,11 +28,15 @@ class _$SourceField extends SourceField {
     if (isConst == null) throw new ArgumentError('null isConst');
     if (isStatic == null) throw new ArgumentError('null isStatic');
   }
+
   factory _$SourceField([updates(SourceFieldBuilder b)]) =>
       (new SourceFieldBuilder()..update(updates)).build();
+
   SourceField rebuild(updates(SourceFieldBuilder b)) =>
       (toBuilder()..update(updates)).build();
+
   _$SourceFieldBuilder toBuilder() => new _$SourceFieldBuilder()..replace(this);
+
   bool operator ==(other) {
     if (other is! SourceField) return false;
     return name == other.name &&
@@ -47,11 +52,11 @@ class _$SourceField extends SourceField {
 
   String toString() {
     return 'SourceField {'
-        'name=${name.toString()}\n'
-        'type=${type.toString()}\n'
-        'generatedIdentifier=${generatedIdentifier.toString()}\n'
-        'isConst=${isConst.toString()}\n'
-        'isStatic=${isStatic.toString()}\n'
+        'name=${name.toString()},\n'
+        'type=${type.toString()},\n'
+        'generatedIdentifier=${generatedIdentifier.toString()},\n'
+        'isConst=${isConst.toString()},\n'
+        'isStatic=${isStatic.toString()},\n'
         '}';
   }
 }
@@ -71,12 +76,6 @@ class _$SourceFieldBuilder extends SourceFieldBuilder {
   }
 
   SourceField build() {
-    if (name == null) throw new ArgumentError('null name');
-    if (type == null) throw new ArgumentError('null type');
-    if (generatedIdentifier == null)
-      throw new ArgumentError('null generatedIdentifier');
-    if (isConst == null) throw new ArgumentError('null isConst');
-    if (isStatic == null) throw new ArgumentError('null isStatic');
     return new _$SourceField._(
         name: name,
         type: type,

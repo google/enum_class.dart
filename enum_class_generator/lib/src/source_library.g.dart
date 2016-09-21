@@ -12,6 +12,7 @@ class _$SourceLibrary extends SourceLibrary {
   final String fileName;
   final String source;
   final BuiltList<SourceClass> classes;
+
   _$SourceLibrary._({this.name, this.fileName, this.source, this.classes})
       : super._() {
     if (name == null) throw new ArgumentError('null name');
@@ -19,12 +20,16 @@ class _$SourceLibrary extends SourceLibrary {
     if (source == null) throw new ArgumentError('null source');
     if (classes == null) throw new ArgumentError('null classes');
   }
+
   factory _$SourceLibrary([updates(SourceLibraryBuilder b)]) =>
       (new SourceLibraryBuilder()..update(updates)).build();
+
   SourceLibrary rebuild(updates(SourceLibraryBuilder b)) =>
       (toBuilder()..update(updates)).build();
+
   _$SourceLibraryBuilder toBuilder() =>
       new _$SourceLibraryBuilder()..replace(this);
+
   bool operator ==(other) {
     if (other is! SourceLibrary) return false;
     return name == other.name &&
@@ -39,10 +44,10 @@ class _$SourceLibrary extends SourceLibrary {
 
   String toString() {
     return 'SourceLibrary {'
-        'name=${name.toString()}\n'
-        'fileName=${fileName.toString()}\n'
-        'source=${source.toString()}\n'
-        'classes=${classes.toString()}\n'
+        'name=${name.toString()},\n'
+        'fileName=${fileName.toString()},\n'
+        'source=${source.toString()},\n'
+        'classes=${classes.toString()},\n'
         '}';
   }
 }
@@ -61,10 +66,6 @@ class _$SourceLibraryBuilder extends SourceLibraryBuilder {
   }
 
   SourceLibrary build() {
-    if (name == null) throw new ArgumentError('null name');
-    if (fileName == null) throw new ArgumentError('null fileName');
-    if (source == null) throw new ArgumentError('null source');
-    if (classes == null) throw new ArgumentError('null classes');
     return new _$SourceLibrary._(
         name: name,
         fileName: fileName,
