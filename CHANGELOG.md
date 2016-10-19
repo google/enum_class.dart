@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Allow quiver 0.23.
+
 ## 1.1.0
 
 - Upgrade analyzer, build and source_gen dependencies.
