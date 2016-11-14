@@ -21,12 +21,12 @@ class _$SourceField extends SourceField {
       this.isConst,
       this.isStatic})
       : super._() {
-    if (name == null) throw new ArgumentError('null name');
-    if (type == null) throw new ArgumentError('null type');
+    if (name == null) throw new ArgumentError.notNull('name');
+    if (type == null) throw new ArgumentError.notNull('type');
     if (generatedIdentifier == null)
-      throw new ArgumentError('null generatedIdentifier');
-    if (isConst == null) throw new ArgumentError('null isConst');
-    if (isStatic == null) throw new ArgumentError('null isStatic');
+      throw new ArgumentError.notNull('generatedIdentifier');
+    if (isConst == null) throw new ArgumentError.notNull('isConst');
+    if (isStatic == null) throw new ArgumentError.notNull('isStatic');
   }
 
   factory _$SourceField([updates(SourceFieldBuilder b)]) =>
@@ -47,7 +47,12 @@ class _$SourceField extends SourceField {
   }
 
   int get hashCode {
-    return hashObjects([name, type, generatedIdentifier, isConst, isStatic]);
+    return $jf($jc(
+        $jc(
+            $jc($jc($jc(0, name.hashCode), type.hashCode),
+                generatedIdentifier.hashCode),
+            isConst.hashCode),
+        isStatic.hashCode));
   }
 
   String toString() {

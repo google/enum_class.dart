@@ -15,10 +15,10 @@ class _$SourceLibrary extends SourceLibrary {
 
   _$SourceLibrary._({this.name, this.fileName, this.source, this.classes})
       : super._() {
-    if (name == null) throw new ArgumentError('null name');
-    if (fileName == null) throw new ArgumentError('null fileName');
-    if (source == null) throw new ArgumentError('null source');
-    if (classes == null) throw new ArgumentError('null classes');
+    if (name == null) throw new ArgumentError.notNull('name');
+    if (fileName == null) throw new ArgumentError.notNull('fileName');
+    if (source == null) throw new ArgumentError.notNull('source');
+    if (classes == null) throw new ArgumentError.notNull('classes');
   }
 
   factory _$SourceLibrary([updates(SourceLibraryBuilder b)]) =>
@@ -39,7 +39,9 @@ class _$SourceLibrary extends SourceLibrary {
   }
 
   int get hashCode {
-    return hashObjects([name, fileName, source, classes]);
+    return $jf($jc(
+        $jc($jc($jc(0, name.hashCode), fileName.hashCode), source.hashCode),
+        classes.hashCode));
   }
 
   String toString() {

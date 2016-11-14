@@ -1,5 +1,5 @@
 name: enum_class_generator
-version: 1.1.1
+version: 1.1.2
 description: >
   Dart classes as enums. This library is the dev dependency.
 authors:
@@ -13,12 +13,12 @@ dependencies:
   analyzer: '>=0.26.1 <1.0.0'
   build: '^0.4.0'
   built_collection: '^1.0.0'
-  built_value: '^0.1.1'
-  enum_class: '^1.1.1'
+  built_value: '^0.1.6'
+  enum_class: '^1.1.2'
   source_gen: '>=0.5.0+03 <0.6.0'
   quiver: '>=0.21.0 <0.24.0'
 
 dev_dependencies:
   build_test: '^0.2.0'
-  built_value_generator: '^0.1.1'
+  built_value_generator: '^0.1.6'
   test: any
