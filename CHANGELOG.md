@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- Regenerate .g.dart files for built_value 0.1.6.
+
 ## 1.1.1
 
 - Allow quiver 0.23.

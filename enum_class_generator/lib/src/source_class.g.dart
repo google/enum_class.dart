@@ -25,10 +25,10 @@ class _$SourceClass extends SourceClass {
       this.usesMixin,
       this.mixinDeclaration})
       : super._() {
-    if (name == null) throw new ArgumentError('null name');
-    if (fields == null) throw new ArgumentError('null fields');
-    if (constructors == null) throw new ArgumentError('null constructors');
-    if (usesMixin == null) throw new ArgumentError('null usesMixin');
+    if (name == null) throw new ArgumentError.notNull('name');
+    if (fields == null) throw new ArgumentError.notNull('fields');
+    if (constructors == null) throw new ArgumentError.notNull('constructors');
+    if (usesMixin == null) throw new ArgumentError.notNull('usesMixin');
   }
 
   factory _$SourceClass([updates(SourceClassBuilder b)]) =>
@@ -51,15 +51,16 @@ class _$SourceClass extends SourceClass {
   }
 
   int get hashCode {
-    return hashObjects([
-      name,
-      fields,
-      constructors,
-      valuesIdentifier,
-      valueOfIdentifier,
-      usesMixin,
-      mixinDeclaration
-    ]);
+    return $jf($jc(
+        $jc(
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, name.hashCode), fields.hashCode),
+                        constructors.hashCode),
+                    valuesIdentifier.hashCode),
+                valueOfIdentifier.hashCode),
+            usesMixin.hashCode),
+        mixinDeclaration.hashCode));
   }
 
   String toString() {
