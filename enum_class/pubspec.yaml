@@ -1,16 +1,7 @@
 name: enum_class
-version: 1.1.2
+version: 2.0.0
 description: >
-  Dart classes as enums. This library is the runtime dependency.
+  This library has been deleted, please use built_value instead.
 authors:
 - David Morgan <davidmorgan@google.com>
-homepage: https://github.com/google/enum_class.dart
-
-environment:
-  sdk: '>=1.8.0 <2.0.0'
-
-dependencies:
-  built_collection: '^1.0.0'
-
-dev_dependencies:
-  test: any
+homepage: https://github.com/google/built_value.dart

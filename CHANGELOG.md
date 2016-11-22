@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0
+
+- Deleted. Equivalent functionality is now available from built_value.
+
 ## 1.1.2
 
 - Regenerate .g.dart files for built_value 0.1.6.
